@@ -98,4 +98,4 @@ with st.expander("View Raw Data Table"):
     st.dataframe(df)
 
 st.markdown("---")
-st.caption("Developed for Environmental Data Science | Data source: Biscayne Bay Water Quality CSV")
+st.caption("Developed for Environmental Data Science | Data sources: Biscayne Bay Water Quality CSV")
