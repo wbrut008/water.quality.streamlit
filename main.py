@@ -10,8 +10,27 @@ st.set_page_config(page_title="Biscayne Bay Water Quality", layout="wide")
 @st.cache_data
 def load_data():
     df = pd.read_csv('biscayneBay_waterquality.csv')
+
+    # Clean column names (remove extra spaces)
+    df.columns = df.columns.str.strip()
+
+    # Find date and time columns (handles variations)
+    date_col = None
+    time_col = None
+
+    for col in df.columns:
+        if 'Date' in col and 'm/d/y' in col:
+            date_col = col
+        if 'Time' in col and 'hh:mm:ss' in col:
+            time_col = col
+
     # Combine Date and Time for better plotting
-    df['Timestamp'] = pd.to_datetime(df['Date m/d/y'] + ' ' + df['Time hh:mm:ss'])
+    if date_col and time_col:
+        df['Timestamp'] = pd.to_datetime(df[date_col].astype(str) + ' ' + df[time_col].astype(str))
+    else:
+        st.error(f"Could not find date/time columns. Available columns: {list(df.columns)}")
+        st.stop()
+
     return df
 
 
